@@ -22,7 +22,7 @@ postconf -e "relayhost = ${SMTP_RELAYHOST}"
 postconf -e 'smtp_sasl_auth_enable = yes'
 postconf -e 'smtp_sasl_security_options = noanonymous'
 postconf -e "smtp_sasl_password_maps = hash:$SASL_PASSWD_FILE"
-postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.20.0.6/32"
+postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.19.0.0/16"
 postconf -e 'maillog_file = /dev/stdout'
 
 # https://serverfault.com/questions/1003885/postfix-in-docker-host-or-domain-name-not-found-dns-and-docker

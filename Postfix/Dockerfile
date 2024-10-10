@@ -6,10 +6,6 @@ RUN apt-get update && \
     apt-get install -y postfix sasl2-bin mailutils && \
     apt-get clean
 
-# Environment variables for username and password
-ENV SMTP_USERNAME=smtpuser
-ENV SMTP_PASSWORD=smtppass
-
 # Create directory for Postfix SASL password
 RUN mkdir -p /etc/postfix/sasl
 

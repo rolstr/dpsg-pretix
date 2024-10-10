@@ -8,7 +8,7 @@ services:
     volumes:
       - caddy-acme:/data/caddy
       - caddy-config:/config/caddy
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddy/Caddyfile:/etc/caddy/Caddyfile:ro
     networks:
       - external-network
       - internal-network
@@ -17,7 +17,7 @@ services:
     image: pretix/standalone:stable
     restart: always
     volumes:
-      - ./pretix.cfg:/etc/pretix/pretix.cfg
+      - ./Pretix/pretix.cfg:/etc/pretix/pretix.cfg:ro
       - pretix-data:/data
     networks:
       - internal-network
@@ -79,5 +79,10 @@ volumes:
 
 networks:
   internal-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1
   external-network:
     external: true
