@@ -1,0 +1,83 @@
+services:
+  caddy:
+    image: caddy:2.8.4
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - caddy-acme:/data/caddy
+      - caddy-config:/config/caddy
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - external-network
+      - internal-network
+
+  pretix:
+    image: pretix/standalone:stable
+    restart: always
+    volumes:
+      - ./pretix.cfg:/etc/pretix/pretix.cfg
+      - pretix-data:/data
+    networks:
+      - internal-network
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:7.4
+    restart: always
+    networks:
+      - internal-network
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: pretix
+      POSTGRES_USER: pretix
+      POSTGRES_PASSWORD: pretix
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C --lc-ctype=C' # https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#database
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - internal-network
+
+  postfix:
+    build:
+      context: ./Postfix
+      dockerfile: Dockerfile
+    environment:
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_RELAYHOST: dpsg-paderborn-de.mail.cloud.nospamproxy.com:587
+      SMTP_SENDERMAIL: roboter@dpsg-paderborn.de
+    networks:
+      - external-network
+      - internal-network
+
+  backup:
+    # https://offen.github.io/docker-volume-backup/
+    image: offen/docker-volume-backup:v2
+    environment:
+      BACKUP_CRON_EXPRESSION: "30 3 * * *"
+      BACKUP_RETENTION_DAYS: 7
+      BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_LATEST_SYMLINK: backup-latest.tar.gz
+    volumes:
+      - pretix-data:/backup/pretix-data:ro
+      - postgres-data:/backup/postgres-data:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${HOME}/backups:/archive
+
+
+volumes:
+  caddy-acme:
+  caddy-config:
+  pretix-data:
+  postgres-data:
+
+networks:
+  internal-network:
+  external-network:
+    external: true
