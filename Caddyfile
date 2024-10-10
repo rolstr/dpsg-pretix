@@ -2,6 +2,6 @@
     acme_ca https://acme-v02.api.letsencrypt.org/directory
 }
 
-tix.stardust.dpsg-paderborn.de {
+tix.stardust.dpsg-paderborn.de { # Adjust domain for your needs
     reverse_proxy pretix:80
 }

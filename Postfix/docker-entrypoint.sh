@@ -17,7 +17,6 @@ chmod 600 $SASL_PASSWD_FILE*
 
 echo "${SMTP_SENDERMAIL}" > /etc/mailname
 
-# Postfix configuration to use the hashed password file
 postconf -e "relayhost = ${SMTP_RELAYHOST}"
 postconf -e 'smtp_sasl_auth_enable = yes'
 postconf -e 'smtp_sasl_security_options = noanonymous'
@@ -25,7 +24,7 @@ postconf -e "smtp_sasl_password_maps = hash:$SASL_PASSWD_FILE"
 postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.19.0.0/16"
 postconf -e 'maillog_file = /dev/stdout'
 
-# https://serverfault.com/questions/1003885/postfix-in-docker-host-or-domain-name-not-found-dns-and-docker
+# see reason for adding this line here: https://serverfault.com/questions/1003885/postfix-in-docker-host-or-domain-name-not-found-dns-and-docker
 cp /etc/resolv.conf /var/spool/postfix/etc/resolv.conf
 
 # Run Postfix in the foreground (this keeps the container running)

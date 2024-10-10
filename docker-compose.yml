@@ -57,7 +57,7 @@ services:
       - internal-network
 
   backup:
-    # https://offen.github.io/docker-volume-backup/
+    # see for documentation https://offen.github.io/docker-volume-backup/
     image: offen/docker-volume-backup:v2
     environment:
       BACKUP_CRON_EXPRESSION: "30 3 * * *"
