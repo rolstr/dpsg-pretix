@@ -71,3 +71,18 @@ Username: admin@localhost
 Password: admin
 ```
 
+# Development/Testing
+
+## Email Service
+
+In order to check if Pretix can send email via the SMTP Email Relay Provider you can send a test email:
+
+```bash
+docker compose exec pretix bash
+pretix sendtestemail <your@email>
+```
+
+Should an error have occurred or the email is simply not sent take a look at the logs of postfix:
+```bash
+docker compose logs postfix -f
+```
