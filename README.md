@@ -23,18 +23,27 @@ Run `crontab -e` and insert:
 ```bash
 15,45 0-2,4-23 * * * /usr/bin/docker exec dpsg-pretix-pretix-1 pretix cron
 ```
-### Optional 
+
+## Create .env file
+
+Create the .env file (like `dpsg-pretix/.env`) according to this format:
+```Properties
+SMTP_USERNAME=<SMTP Email Relay Provider username>
+SMTP_PASSWORD=<SMTP Email Relay Provider password>
+```
+
+### (Optional) 
 - create systemd service for running the services  after booting
 
 # Setup
 >Where could what settings be adjusted? 
 
 ### ./Caddy/Caddyfile
-- Change the Domain by which the Pretix service is called.
+- Change the Domain by which the Pretix web-service is accessed.
 
 ### .env
 
-- Adjust the SMTP_USERNAME and SMTP_PASSWORD credentials for the SMTP Email Relay service
+- Adjust the SMTP_USERNAME and SMTP_PASSWORD credentials for the SMTP Email Relay Provider
 
 ### docker-compose
 
