@@ -5,6 +5,7 @@ Developed for the Deutschen Pfadfinderschaft Sankt Georg [(DPSG)](https://www.dp
 - Fully containerized with `docker compose` system for the <u>Pretix Ticket Selling system</u>
 - Automatic HTTPS certificate managing (initial fetching and renewable) with `caddy`
 - Periodically creating a backup of named volumes with `offen/docker-volume-backup`
+- Pretix Plugins easily installable within the [Pretix Dockerfile](./Pretix/Dockerfile)
 
 # Installation
 > How to install the necessary external services (assume docker is installed and repo is cloned)?

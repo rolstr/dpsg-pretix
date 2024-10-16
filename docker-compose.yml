@@ -14,7 +14,9 @@ services:
       - internal-network
 
   pretix:
-    image: pretix/standalone:stable
+    build:
+      context: ./Pretix
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - ./Pretix/pretix.cfg:/etc/pretix/pretix.cfg:ro
