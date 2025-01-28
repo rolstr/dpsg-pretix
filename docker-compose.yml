@@ -1,7 +1,7 @@
 services:
   caddy:
     image: caddy:2.8.4
-    restart: always
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
@@ -17,7 +17,7 @@ services:
     build:
       context: ./Pretix
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./Pretix/pretix.cfg:/etc/pretix/pretix.cfg:ro
       - pretix-data:/data
@@ -28,13 +28,13 @@ services:
 
   redis:
     image: redis:7.4
-    restart: always
+    restart: unless-stopped
     networks:
       - internal-network
 
   postgres:
     image: postgres:13
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: pretix
       POSTGRES_USER: pretix
@@ -49,6 +49,7 @@ services:
     build:
       context: ./Postfix
       dockerfile: Dockerfile
+    restart: unless-stopped
     environment:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
@@ -61,9 +62,10 @@ services:
   backup:
     # see for documentation https://offen.github.io/docker-volume-backup/
     image: offen/docker-volume-backup:v2
+    restart: unless-stopped
     environment:
       BACKUP_CRON_EXPRESSION: "30 3 * * *"
-      BACKUP_RETENTION_DAYS: 7
+      BACKUP_RETENTION_DAYS: 14
       BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
       BACKUP_LATEST_SYMLINK: backup-latest.tar.gz
     volumes:
